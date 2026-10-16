@@ -27,18 +27,17 @@ If the notes don't cover it, the reply starts with `Not in your notes.`
 
 ## Run
 
-From this directory, with Node 22 (not Bun). Install first. The tools import
-`zod`, and that package is not committed:
+From this directory, with Node 22 (not Bun):
 
 ```bash
-npm install
 npx @cursor/bdk dev
 ```
 
-`npm install` is what fixes `Cannot find package 'zod'` while serving.
-Open the playground at `http://127.0.0.1:3000/playground`. A model turn needs
-a Cursor credential (`npx @cursor/bdk login`). `validate` and direct tool
-calls do not.
+The tools do not import `zod`, so a fresh checkout can serve without
+`npm install`. Open the playground at `http://127.0.0.1:3000/playground`.
+A model turn needs a Cursor credential (`npx @cursor/bdk login`).
+`validate` and direct tool calls do not. `npm install` is only for
+`npm run check`.
 
 ```bash
 npx @cursor/bdk call search_knowledge --input '{"query":"vpn sleep"}'

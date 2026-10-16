@@ -1,23 +1,25 @@
 import { defineTool } from "@cursor/bdk/tools";
-import { z } from "zod/v3";
+import { parseSaveNote, saveNoteSchema } from "../lib/input.js";
 import { saveNote, slug } from "../lib/knowledge.js";
 
 export default defineTool({
   description:
     "Store one raw work note in the knowledge source before extracting facts from it.",
   effect: "write",
-  inputSchema: z.object({
-    text: z.string().min(1).max(20000),
-    title: z.string().min(1).max(140).optional(),
-    topic: z.string().min(1).max(80).optional(),
-  }),
-  dryRunResult: ({ text, title, topic }) => ({
-    stored: false,
-    dryRun: true,
-    title: title ?? text.trim().slice(0, 80),
-    topic: slug(topic ?? title ?? "untitled"),
-  }),
-  async execute({ text, title, topic }, ctx) {
+  inputSchema: saveNoteSchema,
+  dryRunResult: (input) => {
+    const text = typeof input.text === "string" ? input.text : "";
+    const title = typeof input.title === "string" ? input.title : text.trim().slice(0, 80);
+    const topic = typeof input.topic === "string" ? input.topic : title;
+    return {
+      stored: false,
+      dryRun: true,
+      title,
+      topic: slug(topic || "untitled"),
+    };
+  },
+  async execute(input, ctx) {
+    const { text, title, topic } = parseSaveNote(input);
     const capturedAt = new Date().toISOString();
     const resolvedTitle = (title ?? text.trim().split(/\r?\n/).find(Boolean) ?? "Work note")
       .trim()

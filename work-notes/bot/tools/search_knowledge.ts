@@ -1,18 +1,14 @@
 import { defineTool } from "@cursor/bdk/tools";
-import { z } from "zod/v3";
-import { CARD_KINDS, searchKnowledge } from "../lib/knowledge.js";
+import { parseSearch, searchKnowledgeSchema } from "../lib/input.js";
+import { searchKnowledge } from "../lib/knowledge.js";
 
 export default defineTool({
   description:
     "Search the work-notes knowledge source. Use this before answering about a past fix, contact, doc, URL, cheat sheet, or known issue.",
   effect: "read",
-  inputSchema: z.object({
-    query: z.string().max(300).optional(),
-    kind: z.enum(CARD_KINDS).optional(),
-    topic: z.string().min(1).max(80).optional(),
-    limit: z.number().int().min(1).max(20).optional(),
-  }),
-  async execute({ query, kind, topic, limit }, ctx) {
+  inputSchema: searchKnowledgeSchema,
+  async execute(input, ctx) {
+    const { query, kind, topic, limit } = parseSearch(input);
     const result = await searchKnowledge(ctx.host.files, {
       query,
       kind,

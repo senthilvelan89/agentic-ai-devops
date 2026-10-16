@@ -8,8 +8,7 @@
     "dev": "bdk dev"
   },
   "dependencies": {
-    "@cursor/bdk": "^0.2.25",
-    "zod": "^3.25.0"
+    "@cursor/bdk": "^0.2.25"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
