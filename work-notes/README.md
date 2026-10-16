@@ -27,13 +27,15 @@ If the notes don't cover it, the reply starts with `Not in your notes.`
 
 ## Run
 
-From this directory, with Node (not Bun):
+From this directory, with Node 22 (not Bun). Install first. The tools import
+`zod`, and that package is not committed:
 
 ```bash
-npx @cursor/bdk validate
+npm install
 npx @cursor/bdk dev
 ```
 
+`npm install` is what fixes `Cannot find package 'zod'` while serving.
 Open the playground at `http://127.0.0.1:3000/playground`. A model turn needs
 a Cursor credential (`npx @cursor/bdk login`). `validate` and direct tool
 calls do not.
