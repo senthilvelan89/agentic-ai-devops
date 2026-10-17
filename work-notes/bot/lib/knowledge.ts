@@ -251,10 +251,11 @@ export function parseNoteMarkdown(
     const cardTitle = asString(raw.title);
     const cardBody = asString(raw.body);
     if (!kind || !isCardKind(kind) || !cardTitle || !cardBody) return [];
+    const cardTopic = slug(asString(raw.topic) || topic);
     const card: KnowledgeCard = {
-      id: cardId(kind, topic, cardTitle),
+      id: cardId(kind, cardTopic, cardTitle),
       kind,
-      topic,
+      topic: cardTopic,
       title: cardTitle,
       body: cardBody,
       sample,
